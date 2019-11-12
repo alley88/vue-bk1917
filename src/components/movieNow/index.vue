@@ -37,7 +37,7 @@ export default {
     };
   },
   created() {
-    this.handleGetMovieList(10)  
+    this.handleGetMovieList(1)  
   },
   methods:{
    async handleGetMovieList(cityId){
@@ -52,9 +52,16 @@ export default {
   },
   mounted(){
     this.$refs.scroll.handleScroll();
+    //下拉刷新
     this.$refs.scroll.handlepullingDown(()=>{
-        this.handleGetMovieList(20)
+        var arr = [20,42,50,56,60,10];
+        var index = parseInt(Math.random()*6);
+        this.handleGetMovieList(arr[index]);
     });
+    //上拉加载更多
+    this.$refs.scroll.handlepullingUp(()=>{
+      console.log(1111)
+    })
   }
 };
 </script>

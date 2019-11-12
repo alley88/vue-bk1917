@@ -15,27 +15,34 @@ export default {
   data(){
       return {
           flag:false,
-          pullingDownFlag:false
       }
   },
   mounted() {
     this.scroll = new BScroll(this.$refs.wrapper, {
+      //滚动优化
       probeType: 1,
-      pullDownRefresh:true
+      //下拉刷新
+      pullDownRefresh:{
+        threshold:50
+      },
+      //上拉加载更多
+      pullUpLoad:true
     });
   },
   methods: {
     handleScroll() {
       this.scroll.on("scroll", pro => {
-        if (pro.y > 30 && this.pullingDownFlag) {
+        if (pro.y > 50) {
             this.flag = true
         }
       });
     },
+
+
+    
     //下拉刷新获取数据
     handlepullingDown(callback){
         this.scroll.on("pullingDown",()=>{
-            this.pullingDownFlag = true;
            callback()
         })
     },
@@ -48,6 +55,23 @@ export default {
         setTimeout(()=>{
             this.flag = false;
         },1500)
+    },
+
+
+
+    //上拉加载更多
+    handlepullingUp(callback){
+      this.scroll.on("pullingUp",()=>{
+          callback()
+      })
+    },
+
+    //当上拉加载更多请求数据完毕后
+    handlefinishPullUp(){
+      //当上拉加载更多数据获取到以后通过better-scroll可以进行下一次的加载了
+      this.scroll.finishPullUp();
+      //重新计算better-scroll
+      this.scroll.refresh();
     }
   }
 };

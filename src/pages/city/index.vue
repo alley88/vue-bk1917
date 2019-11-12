@@ -1,71 +1,59 @@
 <template>
-  <div class="city_body">
-    <!--热门城市-->
-    <div class="hot_city">
-      <div class="hot_title">热门城市</div>
-      <div class="hot_city_list">
-        <div class="hot_city_name">北京</div>
-        <div class="hot_city_name">北京</div>
-        <div class="hot_city_name">北京</div>
-        <div class="hot_city_name">北京</div>
-        <div class="hot_city_name">北京</div>
-      </div>
-    </div>
-    <!--城市列表-->
-    <div class="city_list">
-      <div class="city_list_item">
-        <div class="city_title_letter">A</div>
-        <div class="city_list_name">
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
+  <div class="city_container">
+    <div class="city_body">
+      <!--热门城市-->
+      <div class="hot_city">
+        <div class="hot_title">热门城市</div>
+        <div class="hot_city_list">
+          <div class="hot_city_name" v-for="(item,index) in hotCity" :key="index">{{item.nm}}</div>
         </div>
       </div>
-      <div class="city_list_item">
-        <div class="city_title_letter">A</div>
-        <div class="city_list_name">
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
+      <!--城市列表-->
+      <div class="city_list">
+        <div class="city_list_item" v-for="(item) in cityList" :key="item.id">
+          <div class="city_title_letter">{{item.index}}</div>
+          <div class="city_list_name">
+            <div
+              class="city_list_name_item"
+              v-for="(child) in item.list"
+              :key="child.id"
+            >{{child.nm}}</div>
+          </div>
         </div>
       </div>
-      <div class="city_list_item">
-        <div class="city_title_letter">A</div>
-        <div class="city_list_name">
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
-          <div class="city_list_name_item">北京</div>
-        </div>
+      <!--城市列表下标-->
+      <div class="city_list_index">
+        <div class="index_item" v-for="item in cityList" :key="item.id">{{item.index}}</div>
       </div>
-    </div>
-    <!--城市列表下标-->
-    <div class="city_list_index">
-      <div class="index_item">A</div>
-      <div class="index_item">B</div>
-      <div class="index_item">C</div>
-      <div class="index_item">D</div>
-      <div class="index_item">E</div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapState } from "vuex";
+export default {
+  name: "City",
+  created() {
+    if (
+      !(sessionStorage.getItem("cityList") && sessionStorage.getItem("hotCity"))
+    ) {
+      this.$store.dispatch("city/handleGetCityList");
+    }
+  },
+  computed: {
+    ...mapState({
+      hotCity: state => state.city.hotCity,
+      cityList: state => state.city.cityList
+    })
+  }
+};
 </script>
 
 <style>
+.city_container{
+  height: 100%;
+  overflow: auto;
+}
 .city_body {
   background: #ebebeb;
 }

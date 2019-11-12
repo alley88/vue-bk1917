@@ -1,5 +1,5 @@
 <template>
-  <Alley-scroll>
+  <Alley-scroll ref="scroll">
     <div class="movie_body">
       <div class="movie_item" v-for="(item,index) in comingList" :key="index">
         <div class="movie_item_pic">
@@ -35,9 +35,32 @@ export default {
       comingList: []
     };
   },
-  async created() {
-    let data = await moviecommingApi();
-    this.comingList = data.data.comingList;
+   created() {
+     this.handleGetMoviecooming(1);
+  },
+  methods: {
+    async handleGetMoviecooming(cityId) {
+      let data = await moviecommingApi(cityId);
+      this.comingList = data.data.comingList;
+    }
+  },
+  watch: {
+    comingList() {
+      this.$refs.scroll.handleRefreshDown();
+    }
+  },
+  mounted() {
+    this.$refs.scroll.handleScroll();
+    //下拉刷新
+    this.$refs.scroll.handlepullingDown(() => {
+      var arr = [20, 42, 50, 56, 60, 10];
+      var index = parseInt(Math.random() * 6);
+      this.handleGetMoviecooming(arr[index]);
+    });
+    //上拉加载更多
+    this.$refs.scroll.handlepullingUp(() => {
+      console.log(1111);
+    });
   }
 };
 </script>
