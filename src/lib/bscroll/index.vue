@@ -26,10 +26,15 @@ export default {
         threshold:50
       },
       //上拉加载更多
-      pullUpLoad:true
+      pullUpLoad:true,
+      tap:true,
+      click:true
     });
   },
   methods: {
+    handleScrollTo(y){
+      this.scroll.scrollTo(0,y,300)
+    },
     handleScroll() {
       this.scroll.on("scroll", pro => {
         if (pro.y > 50) {

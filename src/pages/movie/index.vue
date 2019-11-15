@@ -1,10 +1,11 @@
 <template>
   <div class="page">
+   
     <Header title="猫眼电影" />
     <div id="content">
       <div class="movie_menu">
-        <router-link tag="div" to="/city" class="movie_menu_city">
-          <span>北京</span>
+        <router-link tag="div" :to="'/city?path='+$route.path" class="movie_menu_city">
+          <span>{{this.$store.state.city.nm}}</span>
           <i class="iconfont">&#xe627;</i>
         </router-link>
         <ul class="movie_menu_switch">
@@ -18,14 +19,25 @@
 
       <keep-alive>
           <router-view></router-view>
-      </keep-alive>
+      </keep-alive> 
     </div>
   </div>
 </template>
 
+
 <script>
+import MessageBox from "../../lib/messageBox/index.js"
 export default {
-  name: "Movie"
+  name: "Movie",
+  created(){
+    MessageBox({
+      title:"城市定位",
+      content:"北京",
+      ok:()=>{
+        alert(1)
+      }
+    })
+  }
 };
 </script>
 

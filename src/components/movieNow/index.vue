@@ -1,7 +1,7 @@
 <template>
   <Alley-scroll ref="scroll">
     <div class="movie_body">
-      <div class="movie_item" v-for="(item,index) in movieList" :key="index">
+      <router-link class="movie_item" tag="div" :to="'/detail/'+item.id+'/'+item.nm" v-for="(item,index) in movieList" :key="index">
         <div class="movie_item_pic">
           <img :src="item.img | toImg('128.180')" />
         </div>
@@ -22,27 +22,40 @@
         <div
           :class="item.globalReleased?'movie_item_btn asale':'movie_item_btn ticket'"
         >{{item.globalReleased?'购票':'预售'}}</div>
-      </div>
+      </router-link>
     </div>
   </Alley-scroll>
 </template>
 
 <script>
 import { movienowApi } from "@api/movie";
+
 export default {
   name: "MovieNow",
   data() {
     return {
-      movieList: []
+      movieList: [],
+      typeId:1
     };
   },
   created() {
     this.handleGetMovieList(1)  
+    
+  },
+  activated(){
+    if(this.typeId == this.$store.state.city.cityId){
+      this.movieList = JSON.parse(sessionStorage.getItem("movieList"));
+    }else{
+      this.handleGetMovieList(this.$store.state.city.cityId);
+      this.typeId = this.$store.state.city.cityId;
+    }
+      
   },
   methods:{
    async handleGetMovieList(cityId){
       let data = await movienowApi(cityId);
       this.movieList = data.data.movieList;
+      sessionStorage.setItem("movieList",JSON.stringify(data.data.movieList))
     }
   },
   watch:{

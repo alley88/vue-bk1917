@@ -1,4 +1,5 @@
 import axios from "axios";
+import AlleyUi from "../lib"
 
 const server = axios.create({
     timeout:5000,
@@ -12,6 +13,7 @@ server.interceptors.request.use((config)=>{
     if(config.method == "get"){
         config.params = {...config.data};
     }
+    AlleyUi.loading.loadingMount()
 
     return config;
     //config.headers["content-type"] = "application/json"
@@ -24,6 +26,7 @@ server.interceptors.request.use((config)=>{
 //响应的拦截
 server.interceptors.response.use((res)=>{
     if(res.status == 200){
+        AlleyUi.loading.loadingDestroy()
         return res.data;
     }
 },(err)=>{

@@ -2,8 +2,8 @@ import {cityApi} from "@api/city";
 let state = {
     hotCity:JSON.parse(sessionStorage.getItem("hotCity"))||[],
     cityList:JSON.parse(sessionStorage.getItem("cityList"))||[],
-    nm:"北京",
-    cityId:1
+    nm: sessionStorage.getItem("nm") || "北京",
+    cityId:sessionStorage.getItem("cityId")||1
 }
 
 
@@ -17,6 +17,12 @@ let actions = {
 
 
 let mutations = {
+    handleUpdateCityInfo(state,params){
+        state.cityId = params.id;
+        state.nm = params.nm;
+        sessionStorage.setItem("cityId",params.id);
+        sessionStorage.setItem("nm",params.nm)
+    },
     handleCityList(state,cities){
         console.log(cities)
 
